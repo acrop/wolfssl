@@ -1457,7 +1457,7 @@ target_compile_options(wolfssl PRIVATE "-DBUILDING_WOLFSSL")
 
 target_include_directories(wolfssl
     PUBLIC
-        $<INSTALL_INTERFACE:wolfssl>
+        $<INSTALL_INTERFACE:include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
 )
@@ -1640,7 +1640,9 @@ set(INSTALLED_EXAMPLES
 install(TARGETS wolfssl
         DESTINATION ${CMAKE_INSTALL_LIBDIR}
         EXPORT wolfssl-targets
-        LIBRARY)
+        LIBRARY
+        RUNTIME DESTINATION bin
+)
 # Install the headers
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/wolfssl/
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/wolfssl
