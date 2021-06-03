@@ -92,7 +92,7 @@ static WC_INLINE int wolfSSL_LastError(int err)
 {
     (void)err; /* Suppress unused arg */
 
-#ifdef USE_WINDOWS_API
+#if defined(USE_WINDOWS_API) && !defined(WOLFSSL_LWIP)
     return WSAGetLastError();
 #elif defined(EBSNET)
     return xn_getlasterror();

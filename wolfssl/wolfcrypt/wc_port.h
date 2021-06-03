@@ -218,7 +218,9 @@
             #define WIN32_LEAN_AND_MEAN
         #endif
         #ifndef WOLFSSL_SGX
-            #if defined(_WIN32_WCE) || defined(WIN32_LEAN_AND_MEAN)
+            #if defined(WOLFSSL_LWIP)
+                #define _WINSOCK2API_
+            #elif (defined(_WIN32_WCE) || defined(WIN32_LEAN_AND_MEAN))
                 /* On WinCE winsock2.h must be included before windows.h */
                 #include <winsock2.h>
             #endif
@@ -315,6 +317,8 @@
         #ifndef WOLFSSL_USER_MUTEX
             #if defined(WOLFSSL_LINUXKM)
                 #define WOLFSSL_KTHREADS
+            #elif defined(WOLFSSL_LWIP)
+                #include <lwip/sys.h>
             #else
                 #define WOLFSSL_PTHREADS
                 #include <pthread.h>
@@ -413,6 +417,8 @@
         /* typedef User_Mutex wolfSSL_Mutex; */
     #elif defined(WOLFSSL_LINUXKM)
         typedef struct mutex wolfSSL_Mutex;
+    #elif defined(WOLFSSL_LWIP)
+        typedef sys_mutex_t wolfSSL_Mutex;
     #else
         #error Need a mutex type in multithreaded mode
     #endif /* USE_WINDOWS_API */

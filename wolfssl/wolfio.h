@@ -55,16 +55,18 @@
     #include "zlib.h"
 #endif
 
+#if defined(WOLFSSL_LWIP) && !defined(WOLFSSL_APACHE_MYNEWT)
+    /* lwIP needs to be configured to use sockets API in this mode */
+    /* LWIP_SOCKET 1 in lwip/opt.h or in build */
+    #include "lwip/sockets.h"
+    #ifndef LWIP_PROVIDE_ERRNO
+        #include <errno.h>
+        #define LWIP_PROVIDE_ERRNO 1
+    #endif
+#endif
+
 #ifndef USE_WINDOWS_API
-    #if defined(WOLFSSL_LWIP) && !defined(WOLFSSL_APACHE_MYNEWT)
-        /* lwIP needs to be configured to use sockets API in this mode */
-        /* LWIP_SOCKET 1 in lwip/opt.h or in build */
-        #include "lwip/sockets.h"
-        #ifndef LWIP_PROVIDE_ERRNO
-            #include <errno.h>
-            #define LWIP_PROVIDE_ERRNO 1
-        #endif
-    #elif defined(FREESCALE_MQX)
+    #if defined(FREESCALE_MQX)
         #include <posix.h>
         #include <rtcs.h>
     #elif defined(FREESCALE_KSDK_MQX)
@@ -137,7 +139,7 @@
         #include <sys/fcltypes.h>
         #include <fclerrno.h>
         #include <fclfcntl.h>
-    #elif !defined(WOLFSSL_NO_SOCK)
+    #elif !defined(WOLFSSL_NO_SOCK) && !defined(WOLFSSL_LWIP)
         #include <sys/types.h>
         #include <errno.h>
         #ifndef EBSNET
@@ -176,7 +178,7 @@
     #include <sys/filio.h>
 #endif
 
-#ifdef USE_WINDOWS_API
+#if defined(USE_WINDOWS_API) && !defined(WOLFSSL_LWIP)
     /* no epipe yet */
     #ifndef WSAEPIPE
         #define WSAEPIPE       -12345
@@ -323,7 +325,7 @@
     #endif
 #endif
 
-#ifdef USE_WINDOWS_API
+#if defined(USE_WINDOWS_API) && !defined(WOLFSSL_LWIP)
     typedef unsigned int SOCKET_T;
     #ifndef SOCKET_INVALID
         #define SOCKET_INVALID INVALID_SOCKET
@@ -337,7 +339,7 @@
 
 #ifndef WOLFSSL_NO_SOCK
     #ifndef XSOCKLENT
-        #ifdef USE_WINDOWS_API
+        #if defined(USE_WINDOWS_API) && !defined(WOLFSSL_LWIP)
             #define XSOCKLENT int
         #else
             #define XSOCKLENT socklen_t
@@ -376,7 +378,7 @@ WOLFSSL_API  int wolfIO_Recv(SOCKET_T sd, char *buf, int sz, int rdFlags);
 #endif /* USE_WOLFSSL_IO || HAVE_HTTP_CLIENT */
 
 #ifndef WOLFSSL_NO_SOCK
-#ifdef USE_WINDOWS_API
+#if defined(USE_WINDOWS_API) && !defined(WOLFSSL_LWIP)
     #ifndef CloseSocket
         #define CloseSocket(s) closesocket(s)
     #endif

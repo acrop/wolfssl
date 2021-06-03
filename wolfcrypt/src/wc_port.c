@@ -2093,6 +2093,34 @@ int wolfSSL_CryptHwMutexUnLock(void)
     int wc_UnLockMutex(wolfSSL_Mutex *m) { ... }
     */
 
+#elif defined(WOLFSSL_LWIP)
+
+    int wc_InitMutex(wolfSSL_Mutex *m)
+    {
+        if (sys_mutex_new(m) != ERR_OK) {
+            return BAD_MUTEX_E;
+        }
+        return 0;
+    }
+
+    int wc_FreeMutex(wolfSSL_Mutex *m)
+    {
+        sys_mutex_free(m);
+        return 0;
+    }
+
+    int wc_LockMutex(wolfSSL_Mutex *m)
+    {
+        sys_mutex_lock(m);
+        return 0;
+    }
+
+    int wc_UnLockMutex(wolfSSL_Mutex *m)
+    {
+        sys_mutex_unlock(m);
+        return 0;
+    }
+
 #else
     #warning No mutex handling defined
 
