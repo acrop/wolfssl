@@ -1413,6 +1413,15 @@ set(LIB_SOURCES "")
 # in the *.am files.
 generate_lib_src_list("${LIB_SOURCES}")
 add_library(wolfssl ${LIB_SOURCES})
+target_compile_definitions(wolfssl PRIVATE BUILDING_WOLFSSL)
+
+if (WIN32)
+    get_target_property(WOLFSSL_LIBRARY_TYPE wolfssl TYPE)
+    if ("${WOLFSSL_LIBRARY_TYPE}" STREQUAL "SHARED_LIBRARY")
+        target_compile_definitions(wolfssl PUBLIC WOLFSSL_DLL)
+    endif()
+    unset(WOLFSSL_LIBRARY_TYPE)
+endif()
 
 set_target_properties(wolfssl
     PROPERTIES
