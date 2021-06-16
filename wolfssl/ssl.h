@@ -688,6 +688,7 @@ enum AlertDescription {
     #else
     protocol_version                =  70,
     #endif
+    insufficient_security           =  71,
     inappropriate_fallback          =  86,
     no_renegotiation                = 100,
     missing_extension               = 109,
