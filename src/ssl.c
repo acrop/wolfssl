@@ -555,11 +555,15 @@ WOLFSSL* wolfSSL_new(WOLFSSL_CTX* ctx)
         return ssl;
 
     ssl = (WOLFSSL*) XMALLOC(sizeof(WOLFSSL), ctx->heap, DYNAMIC_TYPE_SSL);
-    if (ssl)
+    if (ssl) {
         if ( (ret = InitSSL(ssl, ctx, 0)) < 0) {
+            lwip_printfi("InitSSL failed %d\n", ret);
             FreeSSL(ssl, ctx->heap);
             ssl = 0;
         }
+    } else {
+        lwip_printfi("malloc failed\n");
+    }
 
     WOLFSSL_LEAVE("SSL_new", ret);
     return ssl;
