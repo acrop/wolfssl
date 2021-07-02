@@ -890,7 +890,7 @@ static void sp_2048_mont_setup(const sp_digit* a, sp_digit* rho)
     x &= 0x1ffffffffffffffL;
 
     /* rho = -1/m mod b */
-    *rho = (1L << 57) - x;
+    *rho = (1LL << 57) - x;
 }
 
 /* Multiply a by scalar b into r. (r = a * b)
@@ -5088,7 +5088,7 @@ static void sp_3072_mont_setup(const sp_digit* a, sp_digit* rho)
     x &= 0x1ffffffffffffffL;
 
     /* rho = -1/m mod b */
-    *rho = (1L << 57) - x;
+    *rho = (1LL << 57) - x;
 }
 
 /* Multiply a by scalar b into r. (r = a * b)
@@ -9404,7 +9404,7 @@ static void sp_4096_mont_setup(const sp_digit* a, sp_digit* rho)
     x &= 0x1fffffffffffffL;
 
     /* rho = -1/m mod b */
-    *rho = (1L << 53) - x;
+    *rho = (1LL << 53) - x;
 }
 
 /* Multiply a by scalar b into r. (r = a * b)
@@ -10966,8 +10966,8 @@ static int sp_4096_div_78(const sp_digit* a, const sp_digit* d,
         t2 = t1 + 156 + 1;
         sd = t2 + 78 + 1;
 
-        sp_4096_mul_d_78(sd, d, 1L << 38);
-        sp_4096_mul_d_156(t1, a, 1L << 38);
+        sp_4096_mul_d_78(sd, d, 1LL << 38);
+        sp_4096_mul_d_156(t1, a, 1LL << 38);
         dv = sd[77];
         t1[78 + 78] += t1[78 + 78 - 1] >> 53;
         t1[78 + 78 - 1] &= 0x1fffffffffffffL;
